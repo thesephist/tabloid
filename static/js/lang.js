@@ -534,12 +534,10 @@ class Environment {
         const scope = this.scopes[this.scopes.length - 1];
 
         switch (node.type) {
-            case N.NumberLiteral: {
+            case N.NumberLiteral:
+            case N.StringLiteral:
+            case N.BoolLiteral:
                 return node.val;
-            }
-            case N.StringLiteral: {
-                return node.val;
-            }
             case N.FnDecl: {
                 scope[node.name] = node;
                 return node;

@@ -50,6 +50,19 @@ class Editor extends Component {
             this.prog = evt.target.value;
             this.render();
         }
+        this.handleKeydown = evt => {
+            if (evt.key === 'Tab') {
+                evt.preventDefault();
+                const idx = evt.target.selectionStart;
+                if (idx !== null) {
+                    const front = this.prog.substr(0, idx);
+                    const back = this.prog.substr(idx);
+                    this.prog = front + '    ' + back;
+                    this.render();
+                    evt.target.setSelectionRange(idx + 4, idx + 4);
+                }
+            }
+        }
     }
     eval() {
         this.output = '';
@@ -85,7 +98,8 @@ class Editor extends Component {
                 </div>
                 <textarea class="editor-input" cols="30" rows="10"
                     value=${this.prog}
-                    oninput=${this.handleInput}>
+                    oninput=${this.handleInput}
+                    onkeydown=${this.handleKeydown}>
                 </textarea>
             </div>
             <div class="output">
