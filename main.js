@@ -8,7 +8,7 @@ WE SAID
         SHOCKING DEVELOPMENT 1
     END OF STORY
     LIES! WE SAID
-        SHOCKING DEVELOPMENT n MULTIPLY factorial OF n
+        SHOCKING DEVELOPMENT n MULTIPLY factorial OF n SUBTRACT 1
     END OF STORY
 END OF STORY
 
@@ -18,6 +18,12 @@ YOU WON'T WANT TO MISS result
 
 PLEASE LIKE AND SUBSCRIBE
 `
+
+const Runtime = {
+    print(s) {
+        console.log(s.toString());
+    }
+}
 
 /* tokenizer */
 
@@ -369,7 +375,7 @@ class Parser {
         }
         return nodes;
     }
-    expectIdent() {
+    expectIdentString() {
         const ident = this.tokens.next();
         if (typeof ident === 'string' && !ident.startsWith('"')) {
             return ident;
@@ -404,10 +410,10 @@ class Parser {
             if (this.tokens.peek(T.With)) {
                 this.tokens.next(); // with
                 // with args
-                const args = [this.expectIdent()];
+                const args = [this.expectIdentString()];
                 while (this.tokens.peek() === T.Comma) {
                     this.tokens.next(); // comma
-                    args.push(this.expectIdent());
+                    args.push(this.expectIdentString());
                 }
                 return {
                     type: N.FnDecl,
@@ -430,7 +436,10 @@ class Parser {
                 exprs.push(this.expr());
             }
             this.tokens.expect(T.EndOfStory);
-            return exprs;
+            return {
+                type: N.ExprGroup,
+                exprs: exprs,
+            };
         }
 
         throw new Error(`Parsing error: expected ident, literal, or block, got ${
@@ -457,7 +466,7 @@ class Parser {
             }
         } else if (next === T.ExpertsClaim) {
             // assignment
-            const name = this.expectIdent();
+            const name = this.expectIdentString();
             this.tokens.expect(T.ToBe);
             const val = this.expr();
             return {
@@ -494,6 +503,7 @@ class Parser {
             const right = this.atom();
             return {
                 type: N.BinaryOp,
+                op,
                 left,
                 right,
             }
@@ -515,14 +525,143 @@ class Parser {
 
 /* executor (tree walk) */
 
+/**
+ * Abused (slightly) to easily return values upstack
+ */
+class ReturnError {
+    constructor(value) {
+        this.value = value;
+    }
+    unwrap() {
+        return this.value;
+    }
+}
+
 class Environment {
-    constructor(nodes) {
+    constructor() {
         this.scopes = [{}]; // begin with global scope
+    }
+    run(nodes) {
+        let rv;
+        for (const node of nodes) {
+            rv = this.eval(node);
+        }
+        return rv;
+    }
+    eval(node) {
+        const scope = this.scopes[this.scopes.length - 1];
+
+        switch (node.type) {
+            case N.NumberLiteral: {
+                return node.val;
+            }
+            case N.StringLiteral: {
+                return node.val;
+            }
+            case N.FnDecl: {
+                scope[node.name] = node;
+                return node;
+            }
+            case N.FnCall: {
+                const fn = this.eval(node.fn);
+                const args = node.args.map(arg => this.eval(arg));
+
+                const calleeScope = {};
+                fn.args.forEach((argName, i) => {
+                    calleeScope[argName] = args[i];
+                });
+
+                this.scopes.push(calleeScope);
+                let rv;
+                try {
+                    this.eval(fn.body);
+                } catch (maybeReturnErr) {
+                    if (maybeReturnErr instanceof ReturnError) {
+                        rv = maybeReturnErr.unwrap();
+                    } else {
+                        // re-throw
+                        throw maybeReturnErr;
+                    }
+                }
+                this.scopes.pop();
+
+                return rv;
+            }
+            case N.Ident: {
+                let i = this.scopes.length - 1;
+                while (i >= 0) {
+                    if (node.val in this.scopes[i]) {
+                        return this.scopes[i][node.val];
+                    }
+                    i --;
+                }
+                console.log(this.scopes[this.scopes.length - 1]);
+                throw new Error(`Runtime error: Undefined variable "${node.val}"`);
+            }
+            case N.Assignment: {
+                scope[node.name] = this.eval(node.val);
+                return scope[node.name];
+            }
+            case N.BinaryOp: {
+                const left = this.eval(node.left);
+                const right = this.eval(node.right);
+                switch (node.op) {
+                    // TODO: other ops
+                    case T.IsActually:
+                        return left === right;
+                    case T.Add:
+                        return left + right;
+                    case T.Subtract:
+                        return left - right;
+                    case T.Multiply:
+                        return left * right;
+                    default:
+                        throw new Error(`Runtime error: Unknown binary op ${node.op.toString()}`);
+                }
+            }
+            case N.IfExpr: {
+                if (this.eval(node.cond)) {
+                    return this.eval(node.ifBody);
+                }
+                if (node.elseBody != null) {
+                    return this.eval(node.elseBody);
+                }
+            }
+            case N.ExprGroup: {
+                let rv = false; // TODO: make null value? make this illegal?
+                for (const expr of node.exprs) {
+                    rv = this.eval(expr);
+                }
+                return rv;
+            }
+            case N.ReturnExpr: {
+                const rv = this.eval(node.val);
+                throw new ReturnError(rv);
+            }
+            case N.ProgEndExpr: {
+                // do nothing
+                break;
+            }
+            case N.PrintExpr: {
+                const val = this.eval(node.val);
+                Runtime.print(val);
+                return val;
+            }
+            default:
+                console.log(JSON.stringify(node, null, 2));
+                throw new Error(`Runtime error: Unknown AST Node of type ${
+                    node.type.toString()
+                }:\n${JSON.stringify(node, null, 2)}`);
+        }
     }
 }
 
 // main
-const tokens = tokenize(prog);
-console.log(tokens);
-const nodes = new Parser(tokens).parse();
-console.log(nodes);
+try {
+    const tokens = tokenize(prog);
+    const nodes = new Parser(tokens).parse();
+    const env = new Environment();
+    env.run(nodes);
+} catch (e) {
+    console.error(e);
+}
