@@ -115,7 +115,7 @@ class App extends Component {
                     <a href="#" onclick=${evt => {
                         evt.preventDefault();
                         this.render();
-                    }}>Rewrite headline!</a>
+                    }}>NEW headline!</a>
                     <a href="https://dotink.co/posts/tabloid/"
                         target="_blank" noopener noreferer>Blog post</a>
                 </nav>
@@ -147,12 +147,16 @@ class App extends Component {
                     Declare a function by writing <code class="inline fixed
                     block">DISCOVER HOW TO ... WITH</code>. Truly, a more
                     gripping way to declare a function can't possibly exist!
-                </li>
-                <li>
-                    Assign to a variable by writing <code class="inline fixed
+                    Similarly, assign to a variable with <code class="inline fixed
                     block">EXPERTS CLAIM ... TO BE</code>. On the Internet,
                     anyone can be an expert, and Tabloid gives YOU the power to
                     wield that responsibility and declare anything you'd like!
+                </li>
+                <li>
+                    There are <strong>no built-in constructs for looping</strong>. The news
+                    cycle is moving too fast! Nobody has time for yesterday's
+                    loops or last week's break statements. If you must loop,
+                    use recursion.
                 </li>
                 <li>
                     To return from a function, simply write <code class="inline
@@ -203,6 +207,8 @@ class App extends Component {
                 <li><code class="inline fixed block">END OF STORY</code> end a block scope</li>
                 <li><code class="inline fixed block">EXPERTS CLAIM...TO BE</code> declare or assign to a variable</li>
                 <li><code class="inline fixed block">YOU WON'T WANT TO MISS</code> print output</li>
+                <li><code class="inline fixed block">TOTALLY RIGHT</code> true</li>
+                <li><code class="inline fixed block">COMPLETELY WRONG</code> false</li>
                 <li><code class="inline fixed block">IS ACTUALLY</code> is equal to</li>
                 <li><code class="inline fixed block">BEATS / SMALLER THAN</code> greater than / less than</li>
                 <li><code class="inline fixed block">SHOCKING DEVELOPMENT</code> return from a function</li>

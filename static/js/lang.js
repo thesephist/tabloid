@@ -110,6 +110,8 @@ const T = {
     ExpertsClaim: Symbol('ExpertsClaim'),
     ToBe: Symbol('ToBe'),
     YouWontWantToMiss: Symbol('YouWontWantToMiss'),
+    TotallyRight: Symbol('TotallyRight'),
+    CompletelyWrong: Symbol('CompletelyWrong'),
     IsActually: Symbol('IsActually'),
     And: Symbol('And'),
     Or: Symbol('Or'),
@@ -122,12 +124,6 @@ const T = {
     SmallerThan: Symbol('SmallerThan'), // <
     ShockingDevelopment: Symbol('ShockingDevelopment'),
     PleaseLikeAndSubscribe: Symbol('PleaseLikeAndSubscribe'),
-
-    // not implemented yet
-    StayTuned: Symbol('StayTuned'),
-    Unexpectedly: Symbol('Unexpectedly'),
-    TotallyRight: Symbol('TotallyRight'),
-    CompletelyWrong: Symbol('CompletelyWrong'),
 }
 
 const BINARY_OPS = [
@@ -256,15 +252,6 @@ function tokenize(prog) {
                 tokens.push(T.PleaseLikeAndSubscribe);
                 break;
             }
-            case 'STAY': {
-                reader.expect('TUNED');
-                tokens.push(T.StayTuned);
-                break;
-            }
-            case 'UNEXPECTEDLY': {
-                tokens.push(T.Unexpectedly);
-                break;
-            }
             case 'TOTALLY': {
                 reader.expect('RIGHT');
                 tokens.push(T.TotallyRight);
@@ -306,6 +293,7 @@ function tokenize(prog) {
 const N = {
     NumberLiteral: Symbol('NumberLiteral'),
     StringLiteral: Symbol('StringLiteral'),
+    BoolLiteral: Symbol('BoolLiteral'),
     FnDecl: Symbol('FnDecl'),
     FnCall: Symbol('FnCall'),
     Ident: Symbol('Ident'),
@@ -327,6 +315,7 @@ class Parser {
      *  Ident
      *  NumberLiteral
      *  StringLiteral
+     *  BoolLiteral
      *  FnCall
      *  FnDecl
      *  ExprGroup
@@ -379,6 +368,16 @@ class Parser {
                 return this.fnCall(ident);
             }
             return ident;
+        } else if (next === T.TotallyRight) {
+            return {
+                type: N.BoolLiteral,
+                val: true,
+            }
+        } else if (next === T.CompletelyWrong) {
+            return {
+                type: N.BoolLiteral,
+                val: false,
+            }
         } else if (next === T.DiscoverHowTo) {
             // fn literal
             const fnName = this.tokens.next();
@@ -460,7 +459,7 @@ class Parser {
             return {
                 type: N.ProgEndExpr,
             }
-        } else if (next == T.YouWontWantToMiss) {
+        } else if (next === T.YouWontWantToMiss) {
             // print expr
             return {
                 type: N.PrintExpr,
@@ -585,15 +584,26 @@ class Environment {
                 const left = this.eval(node.left);
                 const right = this.eval(node.right);
                 switch (node.op) {
-                    // TODO: other ops
                     case T.IsActually:
                         return left === right;
+                    case T.And:
+                        return left && right;
+                    case T.Or:
+                        return left || right;
                     case T.Add:
                         return left + right;
                     case T.Subtract:
                         return left - right;
                     case T.Multiply:
                         return left * right;
+                    case T.Divide:
+                        return left / right;
+                    case T.Modulo:
+                        return left % right;
+                    case T.Beats:
+                        return left > right;
+                    case T.SmallerThan:
+                        return left < right;
                     default:
                         throw new Error(`Runtime error: Unknown binary op ${node.op.toString()}`);
                 }
@@ -607,7 +617,11 @@ class Environment {
                 }
             }
             case N.ExprGroup: {
-                let rv = false; // TODO: make null value? make this illegal?
+                if (!node.exprs.length) {
+                    throw new Error('Runtime error: Empty expression group with no expressions');
+                }
+
+                let rv;
                 for (const expr of node.exprs) {
                     rv = this.eval(expr);
                 }
@@ -622,7 +636,13 @@ class Environment {
                 break;
             }
             case N.PrintExpr: {
-                const val = this.eval(node.val);
+                let val = this.eval(node.val);
+                // shim for boolean to-string's
+                if (val === true) {
+                    val = 'TOTALLY RIGHT';
+                } else if (val === false) {
+                    val = 'COMPLETELY WRONG';
+                }
                 this.runtime.print(val);
                 return val;
             }
