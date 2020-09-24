@@ -1,4 +1,6 @@
-const PROG_DEFAULT = `DISCOVER HOW TO factorial WITH n
+const PROG_DEFAULT = `YOU WON'T WANT TO MISS 'Hello, World!'
+
+DISCOVER HOW TO factorial WITH n
 WE SAID
     WHAT IF n IS ACTUALLY 0
     WE SAID
@@ -10,7 +12,7 @@ WE SAID
 END OF STORY
 
 EXPERTS CLAIM result TO BE factorial OF 10
-YOU WON'T WANT TO MISS 'RESULT IS'
+YOU WON'T WANT TO MISS 'Result is'
 YOU WON'T WANT TO MISS result
 
 PLEASE LIKE AND SUBSCRIBE`;
@@ -21,6 +23,7 @@ const HEADLINES = [
     `Shocking New Programming Language Bewilders Programmers at Google and Facebook!`,
     `Programmer Who Made Everything Now Predicts the Next Big Language!`,
     `The Secret Programming Language Every 10x Programmer Recommends!`,
+    `Programmers at Microsoft Hate This One Trick to Get Good at that Code Thing!`,
 ];
 
 function randomHeadline() {
@@ -56,7 +59,7 @@ class Editor extends Component {
             const nodes = new Parser(tokens).parse();
             const env = new Environment({
                 print: s => {
-                    this.output += s.toString() + '\n';
+                    this.output += s.toString().toUpperCase() + '!\n';
                     this.render();
                 },
             });
@@ -73,7 +76,7 @@ class Editor extends Component {
                     jdom`<button class="block"
                         onclick=${this.handleReset}>Reset</button>`}
                 <button class="accent block"
-                    onclick=${this.handleRun}>Run!</button>
+                    onclick=${this.handleRun}>Run this!</button>
             </div>
             <div class="code">
                 <div class="filler">
@@ -109,6 +112,10 @@ class App extends Component {
                 <nav>
                     <a href="https://github.com/thesephist/tabloid"
                         target="_blank" noopener noreferer>GitHub</a>
+                    <a href="#" onclick=${evt => {
+                        evt.preventDefault();
+                        this.render();
+                    }}>Rewrite headline!</a>
                     <a href="https://dotink.co/posts/tabloid/"
                         target="_blank" noopener noreferer>Blog post</a>
                 </nav>
@@ -118,11 +125,92 @@ class App extends Component {
             </header>
             ${this.editor.node}
             <h2>What?</h2>
+            <p>
+                <strong>Tabloid</strong> is a turing-complete programming
+                language for writing programs in the style of clickbait news
+                headlines.
+            </p>
+            <p>
+                Here are <strike>a few things</strike>${' '}<strong>the Top Five
+                Most Popular Quirks and Features</strong> of the Tabloid
+                programming language <strong>(Number Four Will Shock You!)</strong>
+            </p>
+            <ul>
+                <li>
+                    Print output with the keywords <code class="inline
+                    fixed block">YOU WON'T WANT TO MISS</code> followed by an
+                    expression. Everything printed by Tabloid is
+                    <strong>automatically capitalized, and an exclamation point is
+                    added.</strong> Why would you want anything else?
+                </li>
+                <li>
+                    Declare a function by writing <code class="inline fixed
+                    block">DISCOVER HOW TO ... WITH</code>. Truly, a more
+                    gripping way to declare a function can't possibly exist!
+                </li>
+                <li>
+                    Assign to a variable by writing <code class="inline fixed
+                    block">EXPERTS CLAIM ... TO BE</code>. On the Internet,
+                    anyone can be an expert, and Tabloid gives YOU the power to
+                    wield that responsibility and declare anything you'd like!
+                </li>
+                <li>
+                    To return from a function, simply write <code class="inline
+                    fixed block">SHOCKING DEVELOPMENT</code>! You're going
+                    to—gasp!—<strong>return</strong>? How shocking!
+                </li>
+                <li>
+                    Every program must end with <code
+                    class="inline fixed block">PLEASE LIKE AND
+                    SUBSCRIBE</code>, because you have to grow your audience! <strong>Hashtag hustle</strong>.
+                </li>
+            </ul>
             <h2>But why?</h2>
+            <p>
+                Didn't want to do homework for my
+                <a href="https://cs186berkeley.net/" target="_blank">database
+                systems class</a>, and needed something to do to procrastinate.
+                Will I finish the homework? Did I get enough sleep?
+            </p>
+            <p>Stay tuned to find out!</p>
             <h2>Does it actually work?</h2>
+            <p>
+                Yes. Tabloid is a <strong>fully functioning, turing complete
+                programming language with an interpreter</strong> written in
+                JavaScript.  Tabloid currently only supports numbers, strings,
+                and booleans, but with these elements, you can write any
+                program you'd want to write. You can edit and run the program above, or
+                <a href="https://github.com/thesephist/tabloid">see how it works for yourself</a>.
+            </p>
+            <p>
+                Before making Tabloid, I also created a more <strike>useful and
+                well-designed</strike>${' '}<strong>boring and unpopular</strong>
+                programming language, called <a href="https://dotink.co/"
+                target="_blank">Ink</a>.
+            </p>
+            <h2>How much is there?</h2>
+            <p>
+            Here's the full list of non-standard keywords that Tabloid
+            currently uses, in addition to standard operators like <code
+            class="inline fixed block">PLUS</code> and <code class="inline
+            fixed block">MINUS</code>.
+            </p>
+            <ul>
+                <li><code class="inline fixed block">DISCOVER HOW TO...WITH</code> declare a function</li>
+                <li><code class="inline fixed block">WE SAID</code> begin a block scope</li>
+                <li><code class="inline fixed block">A OF B, C</code> call function A with arguments B, C</li>
+                <li><code class="inline fixed block">WHAT IF...LIES!</code> an if-else expression</li>
+                <li><code class="inline fixed block">END OF STORY</code> end a block scope</li>
+                <li><code class="inline fixed block">EXPERTS CLAIM...TO BE</code> declare or assign to a variable</li>
+                <li><code class="inline fixed block">YOU WON'T WANT TO MISS</code> print output</li>
+                <li><code class="inline fixed block">IS ACTUALLY</code> is equal to</li>
+                <li><code class="inline fixed block">BEATS / SMALLER THAN</code> greater than / less than</li>
+                <li><code class="inline fixed block">SHOCKING DEVELOPMENT</code> return from a function</li>
+                <li><code class="inline fixed block">PLEASE LIKE AND SUBSCRIBE</code> end of program</li>
+            </ul>
             <footer>
                 <p>
-                    Tabloid is a project by
+                    Tabloid is an overnight hack by
                     <a href="https://thesephist.com/">@thesephist</a>,
                     website built with
                     <a href="https://github.com/thesephist/torus">Torus</a>

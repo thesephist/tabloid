@@ -5,6 +5,13 @@ html {
     font-size: 18px;
 }
 
+/* blocks.css bug shim */
+
+.fixed.inline.block {
+    pointer-events: none;
+    line-height: 1.5em;
+}
+
 /* resets */
 
 html,
@@ -58,15 +65,21 @@ footer {
 
 nav {
     margin: .8em 0;
+    width: 96%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
 }
 
 nav a {
     color: var(--block-accent-color);
-    margin: 0 1em;
 }
 
 header .subtitle {
     font-size: 1.2em;
+    line-height: 1.5em;
 }
 
 header .lang.block {
@@ -77,7 +90,7 @@ header .lang.block {
     font-weight: normal;
     color: #fff;
     display: inline-block; /* for transforms */
-    transform: rotate(-10deg);
+    transform: rotate(-10deg) translateY(6px);
     pointer-events: none;
 }
 
@@ -92,7 +105,7 @@ header .lang.block {
 .editor .output,
 .editor .errors {
     width: 100%;
-    padding: .5em 1em;
+    padding: .8em 1em;
     border-bottom: 3px solid var(--block-text-color);
     box-sizing: border-box;
 }
@@ -103,6 +116,7 @@ header .lang.block {
 
 .editor.block {
     padding: 0;
+    padding-top: 24px;
 }
 
 .editor .controls {
@@ -118,6 +132,11 @@ header .lang.block {
     justify-content: flex-end;
 }
 
+.editor .code {
+    padding: 0;
+    position: relative;
+}
+
 .editor .output {
     min-height: 5em;
     display: flex;
@@ -128,11 +147,6 @@ header .lang.block {
 
 .editor .output .output-line {
     width: 100%;
-}
-
-.editor .code {
-    padding: 0;
-    position: relative;
 }
 
 .editor .errors {
@@ -178,6 +192,40 @@ textarea.editor-input:focus {
     color: #777;
 }
 
+main > h2 {
+    margin-top: 1.5em;
+}
+
+main > p,
+main > ul li {
+    line-height: 1.5em;
+}
+
+main > ul li {
+    margin-bottom: .5em;
+}
+
+main > p a {
+    color: var(--block-accent-color);
+}
+
+footer {
+    margin-top: 2em;
+}
+
 footer a {
     color: var(--block-accent-color);
+}
+
+@media only screen and (max-width: 600px) {
+    header .subtitle {
+        line-height: 1.7em;
+    }
+    header .lang.block {
+        transform: rotate(-5deg) translateY(4px);
+    }
+    .filler,
+    textarea.editor-input {
+        font-size: .8em;
+    }
 }
