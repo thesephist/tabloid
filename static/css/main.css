@@ -5,12 +5,13 @@ html {
     font-size: 18px;
 }
 
-/* layout */
+/* resets */
 
 html,
 body {
     --block-accent-color: #e02345;
     margin: 0;
+    background: #f8f5f5;
 }
 
 main {
@@ -26,9 +27,157 @@ h3 {
     font-family: var(--ff-tabloid);
     font-weight: normal;
     color: var(--block-accent-color);
+    margin: .5rem 0;
 }
 
+p {
+    margin-top: .5em;
+    margin-bottom: 1em;
+}
+
+button {
+    font-size: 1em;
+}
+
+code,
 input,
 textarea {
     font-family: var(--ff-mono);
+}
+
+/* layout */
+
+header,
+footer {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 3em;
+}
+
+nav {
+    margin: .8em 0;
+}
+
+nav a {
+    color: var(--block-accent-color);
+    margin: 0 1em;
+}
+
+header .subtitle {
+    font-size: 1.2em;
+}
+
+header .lang.block {
+    --block-background-color: #000;
+
+    font-size: 1.4em;
+    font-family: var(--ff-tabloid);
+    font-weight: normal;
+    color: #fff;
+    display: inline-block; /* for transforms */
+    transform: rotate(-10deg);
+    pointer-events: none;
+}
+
+.editor {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    margin-bottom: 3em;
+}
+
+.editor .code,
+.editor .output,
+.editor .errors {
+    width: 100%;
+    padding: .5em 1em;
+    border-bottom: 3px solid var(--block-text-color);
+    box-sizing: border-box;
+}
+
+.editor > :last-child {
+    border-bottom: 0;
+}
+
+.editor.block {
+    padding: 0;
+}
+
+.editor .controls {
+    position: absolute;
+    top: -24px;
+    right: 0;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 1em;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.editor .output {
+    min-height: 5em;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    line-height: 1.5em;
+}
+
+.editor .output .output-line {
+    width: 100%;
+}
+
+.editor .code {
+    padding: 0;
+    position: relative;
+}
+
+.editor .errors {
+    color: var(--block-accent-color);
+}
+
+.filler,
+textarea.editor-input {
+    font-family: var(--ff-mono);
+    font-size: 1em;
+    line-height: 1.3em;
+    padding: .5em 1em;
+    border: 0;
+    width: 100%;
+    box-sizing: border-box;
+    overflow-y: auto;
+    resize: none;
+    white-space: nowrap;
+}
+
+textarea.editor-input {
+    position: absolute;
+    background: var(--block-background-color);
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+textarea.editor-input:focus {
+    outline: none;
+    background: #f8f8f8;
+}
+
+.filler p {
+    margin: 0;
+    padding: 0;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+}
+
+.output .no-output {
+    color: #777;
+}
+
+footer a {
+    color: var(--block-accent-color);
 }

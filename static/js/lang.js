@@ -47,7 +47,7 @@ class Reader {
  */
 class Wordifier {
     constructor(str) {
-        this.reader = new Reader(str);
+        this.reader = new Reader(str.trim());
         this.tokens = [];
     }
     wordify() {
@@ -83,7 +83,7 @@ class Wordifier {
             }
             this.reader.dropWhitespace();
         }
-        return this.tokens.slice(1);
+        return this.tokens;
     }
     wordifyString(endChar) {
         let acc = '';
