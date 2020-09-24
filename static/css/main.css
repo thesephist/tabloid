@@ -158,13 +158,14 @@ textarea.editor-input {
     font-family: var(--ff-mono);
     font-size: 1em;
     line-height: 1.3em;
+    margin: 0;
     padding: .5em 1em;
     border: 0;
     width: 100%;
     box-sizing: border-box;
     overflow-y: auto;
     resize: none;
-    white-space: nowrap;
+    white-space: pre-wrap;
 }
 
 textarea.editor-input {
