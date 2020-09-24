@@ -154,7 +154,7 @@ class App extends Component {
                         evt.preventDefault();
                         this.render();
                     }}>NEW headline!</a>
-                    <a href="https://github.com/thesephist/tabloid#language-overview"
+                    <a href="https://github.com/thesephist/tabloid/blob/master/README.md#language-overview"
                         target="_blank" noopener noreferer>Tutorial</a>
                 </nav>
                 <p class="subtitle">
