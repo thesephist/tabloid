@@ -196,7 +196,8 @@ main > h2 {
 }
 
 main > p,
-main > ul li {
+main > ul li,
+footer {
     line-height: 1.5em;
 }
 

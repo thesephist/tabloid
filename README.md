@@ -1,2 +1,5 @@
-# tabloid
-A minimal programming language inspired by clickbait headlines
+# The Tabloid Programming Language
+
+A minimal programming language ~inspired~ **supercharged** by clickbait headlines.
+
+
