@@ -243,7 +243,6 @@ class App extends Component {
                 <li><code class="inline fixed block">TOTALLY RIGHT</code> true</li>
                 <li><code class="inline fixed block">COMPLETELY WRONG</code> false</li>
                 <li><code class="inline fixed block">PLUS / MINUS / TIMES / DIVIDED BY / MODULO</code> the obvious arithmetic operations</li>
-                <li><code class="inline fixed block">BEATS / SMALLER THAN</code> greater than / less than</li>
                 <li><code class="inline fixed block">IS ACTUALLY</code> is equal to</li>
                 <li><code class="inline fixed block">BEATS / SMALLER THAN</code> greater than / less than</li>
                 <li><code class="inline fixed block">SHOCKING DEVELOPMENT</code> return from a function</li>
