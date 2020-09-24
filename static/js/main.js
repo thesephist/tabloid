@@ -1,7 +1,7 @@
 const PROG_FACTORIAL = `YOU WON'T WANT TO MISS 'Hello, World!'
 
 DISCOVER HOW TO factorial WITH n
-WE SAID
+RUMOR HAS IT
     WHAT IF n IS ACTUALLY 0
         SHOCKING DEVELOPMENT 1
     LIES!
@@ -16,10 +16,10 @@ YOU WON'T WANT TO MISS result
 PLEASE LIKE AND SUBSCRIBE`;
 
 const PROG_FIBONACCI = `DISCOVER HOW TO fibonacci WITH a, b, n
-WE SAID
+RUMOR HAS IT
     WHAT IF n SMALLER THAN 1
         SHOCKING DEVELOPMENT b
-    LIES! WE SAID
+    LIES! RUMOR HAS IT
         YOU WON'T WANT TO MISS b
         SHOCKING DEVELOPMENT
             fibonacci OF b, a PLUS b, n MINUS 1
@@ -109,11 +109,11 @@ class Editor extends Component {
         return jdom`<div class="editor fixed block">
             <div class="controls">
                 <button class="block"
-                    onclick=${this.setFibonacci}>Fibonacci sample</button>
+                    onclick=${this.setFibonacci}>Fibonacci <span class="desktop">sample</span></button>
                 <button class="block"
-                    onclick=${this.setFactorial}>Factorial sample</button>
+                    onclick=${this.setFactorial}>Factorial <span class="desktop">sample</span></button>
                 <button class="accent block"
-                    onclick=${this.handleRun}>Run this!</button>
+                    onclick=${this.handleRun}>Run<span class="desktop"> this</span>!</button>
             </div>
             <div class="code">
                 <div class="filler">
@@ -231,10 +231,10 @@ class App extends Component {
                 target="_blank">Ink</a>.
             </p>
             <h2>How much is there?</h2>
-            <p>Here's the full list of non-standard keywords that Tabloid currently uses:</p>
+            <p>Here's the full list of standard keywords that Tabloid currently uses:</p>
             <ul>
                 <li><code class="inline fixed block">DISCOVER HOW TO...WITH</code> declare a function</li>
-                <li><code class="inline fixed block">WE SAID</code> begin a block scope</li>
+                <li><code class="inline fixed block">RUMOR HAS IT</code> begin a block scope</li>
                 <li><code class="inline fixed block">A OF B, C</code> call function A with arguments B, C</li>
                 <li><code class="inline fixed block">WHAT IF...LIES!</code> an if-else expression</li>
                 <li><code class="inline fixed block">END OF STORY</code> end a block scope</li>
@@ -243,6 +243,7 @@ class App extends Component {
                 <li><code class="inline fixed block">TOTALLY RIGHT</code> true</li>
                 <li><code class="inline fixed block">COMPLETELY WRONG</code> false</li>
                 <li><code class="inline fixed block">PLUS / MINUS / TIMES / DIVIDED BY / MODULO</code> the obvious arithmetic operations</li>
+                <li><code class="inline fixed block">BEATS / SMALLER THAN</code> greater than / less than</li>
                 <li><code class="inline fixed block">IS ACTUALLY</code> is equal to</li>
                 <li><code class="inline fixed block">BEATS / SMALLER THAN</code> greater than / less than</li>
                 <li><code class="inline fixed block">SHOCKING DEVELOPMENT</code> return from a function</li>

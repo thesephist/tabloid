@@ -178,7 +178,6 @@ textarea.editor-input {
 
 textarea.editor-input:focus {
     outline: none;
-    background: #f8f8f8;
 }
 
 .filler p {
@@ -226,5 +225,8 @@ footer a {
     .filler,
     textarea.editor-input {
         font-size: .8em;
+    }
+    .desktop {
+        display: none;
     }
 }

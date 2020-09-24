@@ -103,7 +103,7 @@ const T = {
     DiscoverHowTo: Symbol('DiscoverHowTo'),
     With: Symbol('With'),
     Of: Symbol('Of'),
-    WeSaid: Symbol('WeSaid'),
+    RumorHasIt: Symbol('RumorHasIt'),
     WhatIf: Symbol('WhatIf'),
     LiesBang: Symbol('LiesBang'),
     EndOfStory: Symbol('EndOfStory'),
@@ -160,9 +160,10 @@ function tokenize(prog) {
                 tokens.push(T.Of);
                 break;
             }
-            case 'WE': {
-                reader.expect('SAID');
-                tokens.push(T.WeSaid);
+            case 'RUMOR': {
+                reader.expect('HAS');
+                reader.expect('IT');
+                tokens.push(T.RumorHasIt);
                 break;
             }
             case 'WHAT': {
@@ -409,7 +410,7 @@ class Parser {
                     body: this.expr(),
                 }
             }
-        } else if (next === T.WeSaid) {
+        } else if (next === T.RumorHasIt) {
             // block
             const exprs = [];
             while (this.tokens.hasNext() && this.tokens.peek() !== T.EndOfStory) {
