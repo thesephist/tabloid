@@ -47,7 +47,7 @@ class Reader {
  */
 class Wordifier {
     constructor(str) {
-        this.reader = new Reader(prog);
+        this.reader = new Reader(str);
         this.tokens = [];
     }
     wordify() {
@@ -623,7 +623,7 @@ class Environment {
             }
             case N.PrintExpr: {
                 const val = this.eval(node.val);
-                Runtime.print(val);
+                this.runtime.print(val);
                 return val;
             }
             default:
