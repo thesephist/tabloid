@@ -154,8 +154,8 @@ class App extends Component {
                         evt.preventDefault();
                         this.render();
                     }}>NEW headline!</a>
-                    <a href="https://dotink.co/posts/tabloid/"
-                        target="_blank" noopener noreferer>Blog post</a>
+                    <a href="https://github.com/thesephist/tabloid#language-overview"
+                        target="_blank" noopener noreferer>Tutorial</a>
                 </nav>
                 <p class="subtitle">
                     <strong class="lang fixed inline block">Tabloid:</strong> The Clickbait Headline Programming Language
