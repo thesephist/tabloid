@@ -6,12 +6,13 @@ WE SAID
     WHAT IF n IS ACTUALLY 0
     WE SAID
         SHOCKING DEVELOPMENT 1
+    END OF STORY
     LIES! WE SAID
-        SHOCKING DEVELOPMENT MULTIPLY n, factorial OF (n)
+        SHOCKING DEVELOPMENT n MULTIPLY factorial OF n
     END OF STORY
 END OF STORY
 
-EXPERTS CLAIM result TO BE factorial OF (10)
+EXPERTS CLAIM result TO BE factorial OF 10
 YOU WON'T WANT TO MISS 'RESULT IS'
 YOU WON'T WANT TO MISS result
 
@@ -130,7 +131,7 @@ const T = {
     YouWontWantToMiss: Symbol('YouWontWantToMiss'),
     IsActually: Symbol('IsActually'),
     And: Symbol('And'),
-    or: Symbol('or'),
+    Or: Symbol('Or'),
     Add: Symbol('Add'),
     Subtract: Symbol('Subtract'),
     Multiply: Symbol('Multiply'),
@@ -140,177 +141,183 @@ const T = {
     SmallerThan: Symbol('SmallerThan'), // <
     ShockingDevelopment: Symbol('ShockingDevelopment'),
     PleaseLikeAndSubscribe: Symbol('PleaseLikeAndSubscribe'),
+
+    // not implemented yet
     StayTuned: Symbol('StayTuned'),
     Unexpectedly: Symbol('Unexpectedly'),
     TotallyRight: Symbol('TotallyRight'),
     CompletelyWrong: Symbol('CompletelyWrong'),
 }
 
-class Tokenizer {
-    constructor(prog) {
-        this.reader = new Reader(new Wordifier(prog).wordify(), []);
-        this.tokens = [];
-    }
-    tokenize() {
-        if (this.tokens.length) return this.tokens;
+const BINARY_OPS = [
+    T.IsActually,
+    T.And,
+    T.Or,
+    T.Add,
+    T.Subtract,
+    T.Multiply,
+    T.Divide,
+    T.Modulo,
+    T.Beats,
+    T.SmallerThan,
+];
 
-        while (this.reader.hasNext()) {
-            const next = this.reader.next();
-            switch (next) {
-                case 'DISCOVER': {
-                    this.reader.expect('HOW');
-                    this.reader.expect('TO');
-                    this.tokens.push(T.DiscoverHowTo);
-                    break;
-                }
-                case 'WITH': {
-                    this.tokens.push(T.With);
-                    break;
-                }
-                case 'OF': {
-                    this.tokens.push(T.Of);
-                    break;
-                }
-                case 'WE': {
-                    this.reader.expect('SAID');
-                    this.tokens.push(T.WeSaid);
-                    break;
-                }
-                case 'WHAT': {
-                    this.reader.expect('IF');
-                    this.tokens.push(T.WhatIf);
-                    break;
-                }
-                case 'LIES!': {
-                    this.tokens.push(T.LiesBang);
-                    break;
-                }
-                case 'END': {
-                    this.reader.expect('OF');
-                    this.reader.expect('STORY');
-                    this.tokens.push(T.EndOfStory);
-                    break;
-                }
-                case 'EXPERTS': {
-                    this.reader.expect('CLAIM');
-                    this.tokens.push(T.ExpertsClaim);
-                    break;
-                }
-                case 'TO': {
-                    this.reader.expect('BE');
-                    this.tokens.push(T.ToBe);
-                    break;
-                }
-                case 'YOU': {
-                    this.reader.expect('WON\'T');
-                    this.reader.expect('WANT');
-                    this.reader.expect('TO');
-                    this.reader.expect('MISS');
-                    this.tokens.push(T.YouWontWantToMiss);
-                    break;
-                }
-                case 'IS': {
-                    this.reader.expect('ACTUALLY');
-                    this.tokens.push(T.IsActually);
-                    break;
-                }
-                case 'AND': {
-                    this.tokens.push(T.And);
-                    break;
-                }
-                case 'OR': {
-                    this.tokens.push(T.Or);
-                    break;
-                }
-                case 'ADD': {
-                    this.tokens.push(T.Add);
-                    break;
-                }
-                case 'SUBTRACT': {
-                    this.tokens.push(T.Subtract);
-                    break;
-                }
-                case 'MULTIPLY': {
-                    this.tokens.push(T.Multiply);
-                    break;
-                }
-                case 'DIVIDE': {
-                    this.tokens.push(T.Divide);
-                    break;
-                }
-                case 'MODULO': {
-                    this.tokens.push(T.Modulo);
-                    break;
-                }
-                case 'BEATS': {
-                    this.tokens.push(T.Beats);
-                    break;
-                }
-                case 'SMALLER': {
-                    this.reader.expect('THAN');
-                    this.tokens.push(T.SmallerThan);
-                    break;
-                }
-                case 'SHOCKING': {
-                    this.reader.expect('DEVELOPMENT');
-                    this.tokens.push(T.ShockingDevelopment);
-                    break;
-                }
-                case 'PLEASE': {
-                    this.reader.expect('LIKE');
-                    this.reader.expect('AND');
-                    this.reader.expect('SUBSCRIBE');
-                    this.tokens.push(T.PleaseLikeAndSubscribe);
-                    break;
-                }
-                case 'STAY': {
-                    this.reader.expect('TUNED');
-                    this.tokens.push(T.StayTuned);
-                    break;
-                }
-                case 'UNEXPECTEDLY': {
-                    this.tokens.push(T.Unexpectedly);
-                    break;
-                }
-                case 'TOTALLY': {
-                    this.reader.expect('RIGHT');
-                    this.tokens.push(T.TotallyRight);
-                    break;
-                }
-                case 'COMPLETELY': {
-                    this.reader.expect('WRONG');
-                    this.tokens.push(T.CompletelyWrong);
-                    break;
-                }
-                case '(': {
-                    this.tokens.push(T.LParen);
-                    break;
-                }
-                case ')': {
-                    this.tokens.push(T.RParen);
-                    break;
-                }
-                case ',': {
-                    this.tokens.push(T.Comma);
-                    break;
-                }
-                default: {
-                    if (!isNaN(parseFloat(next))) {
-                        // number literal
-                        this.tokens.push(parseFloat(next));
-                    } else {
-                        // string or varname
-                        this.tokens.push(next);
-                    }
+function tokenize(prog) {
+    const reader = new Reader(new Wordifier(prog).wordify(), []);
+    const tokens = [];
+
+    while (reader.hasNext()) {
+        const next = reader.next();
+        switch (next) {
+            case 'DISCOVER': {
+                reader.expect('HOW');
+                reader.expect('TO');
+                tokens.push(T.DiscoverHowTo);
+                break;
+            }
+            case 'WITH': {
+                tokens.push(T.With);
+                break;
+            }
+            case 'OF': {
+                tokens.push(T.Of);
+                break;
+            }
+            case 'WE': {
+                reader.expect('SAID');
+                tokens.push(T.WeSaid);
+                break;
+            }
+            case 'WHAT': {
+                reader.expect('IF');
+                tokens.push(T.WhatIf);
+                break;
+            }
+            case 'LIES!': {
+                tokens.push(T.LiesBang);
+                break;
+            }
+            case 'END': {
+                reader.expect('OF');
+                reader.expect('STORY');
+                tokens.push(T.EndOfStory);
+                break;
+            }
+            case 'EXPERTS': {
+                reader.expect('CLAIM');
+                tokens.push(T.ExpertsClaim);
+                break;
+            }
+            case 'TO': {
+                reader.expect('BE');
+                tokens.push(T.ToBe);
+                break;
+            }
+            case 'YOU': {
+                reader.expect('WON\'T');
+                reader.expect('WANT');
+                reader.expect('TO');
+                reader.expect('MISS');
+                tokens.push(T.YouWontWantToMiss);
+                break;
+            }
+            case 'IS': {
+                reader.expect('ACTUALLY');
+                tokens.push(T.IsActually);
+                break;
+            }
+            case 'AND': {
+                tokens.push(T.And);
+                break;
+            }
+            case 'OR': {
+                tokens.push(T.Or);
+                break;
+            }
+            case 'ADD': {
+                tokens.push(T.Add);
+                break;
+            }
+            case 'SUBTRACT': {
+                tokens.push(T.Subtract);
+                break;
+            }
+            case 'MULTIPLY': {
+                tokens.push(T.Multiply);
+                break;
+            }
+            case 'DIVIDE': {
+                tokens.push(T.Divide);
+                break;
+            }
+            case 'MODULO': {
+                tokens.push(T.Modulo);
+                break;
+            }
+            case 'BEATS': {
+                tokens.push(T.Beats);
+                break;
+            }
+            case 'SMALLER': {
+                reader.expect('THAN');
+                tokens.push(T.SmallerThan);
+                break;
+            }
+            case 'SHOCKING': {
+                reader.expect('DEVELOPMENT');
+                tokens.push(T.ShockingDevelopment);
+                break;
+            }
+            case 'PLEASE': {
+                reader.expect('LIKE');
+                reader.expect('AND');
+                reader.expect('SUBSCRIBE');
+                tokens.push(T.PleaseLikeAndSubscribe);
+                break;
+            }
+            case 'STAY': {
+                reader.expect('TUNED');
+                tokens.push(T.StayTuned);
+                break;
+            }
+            case 'UNEXPECTEDLY': {
+                tokens.push(T.Unexpectedly);
+                break;
+            }
+            case 'TOTALLY': {
+                reader.expect('RIGHT');
+                tokens.push(T.TotallyRight);
+                break;
+            }
+            case 'COMPLETELY': {
+                reader.expect('WRONG');
+                tokens.push(T.CompletelyWrong);
+                break;
+            }
+            case '(': {
+                tokens.push(T.LParen);
+                break;
+            }
+            case ')': {
+                tokens.push(T.RParen);
+                break;
+            }
+            case ',': {
+                tokens.push(T.Comma);
+                break;
+            }
+            default: {
+                if (!isNaN(parseFloat(next))) {
+                    // number literal
+                    tokens.push(parseFloat(next));
+                } else {
+                    // string or varname
+                    tokens.push(next);
                 }
             }
         }
-        return this.tokens;
     }
-}
-
-function tokenize(prog) {
-    const reader = new Reader(prog);
+    return tokens;
 }
 
 /* parser */
@@ -318,24 +325,204 @@ function tokenize(prog) {
 const N = {
     NumberLiteral: Symbol('NumberLiteral'),
     StringLiteral: Symbol('StringLiteral'),
-    FnLiteral: Symbol('FnLiteral'),
+    FnDecl: Symbol('FnDecl'),
     FnCall: Symbol('FnCall'),
     Ident: Symbol('Ident'),
+    Assignment: Symbol('Assignment'),
     BinaryOp: Symbol('BinaryOp'),
     IfExpr: Symbol('IfExpr'),
-    ExprList: Symbol('ExprList'),
-    // etc
+    ExprGroup: Symbol('ExprGroup'),
+    ReturnExpr: Symbol('ReturnExpr'),
+    ProgEndExpr: Symbol('ProgEndExpr'),
+    PrintExpr: Symbol('PrintExpr'),
+}
+
+class Parser {
+    constructor(tokens) {
+        this.tokens = new Reader(tokens, []);
+    }
+    /**
+     * Atom
+     *  Ident
+     *  NumberLiteral
+     *  StringLiteral
+     *  FnCall
+     *  FnDecl
+     *  ExprGroup
+     *
+     * Expression:
+     *  (begins with atom)
+     *      BinaryOp
+     *      Atom
+     *  (begins with keyword)
+     *      IfExpr
+     *      Assignment
+     *      ReturnExpr
+     *      ProgEndExpr
+     *      PrintExpr
+     *
+     */
+    parse() {
+        const nodes = [];
+        while (this.tokens.hasNext()) {
+            nodes.push(this.expr());
+        }
+        return nodes;
+    }
+    expectIdent() {
+        const ident = this.tokens.next();
+        if (typeof ident === 'string' && !ident.startsWith('"')) {
+            return ident;
+        }
+        throw new Error(`Parsing error: expected identifier, got ${ident.toString()}`);
+    }
+    atom() {
+        const next = this.tokens.next();
+        if (typeof next === 'number') {
+            return {
+                type: N.NumberLiteral,
+                val: next,
+            }
+        } else if (typeof next === 'string') {
+            if (next.startsWith('"')) {
+                return {
+                    type: N.StringLiteral,
+                    val: next.substr(1),
+                }
+            }
+            const ident = {
+                type: N.Ident,
+                val: next,
+            }
+            if (this.tokens.peek() === T.Of) {
+                return this.fnCall(ident);
+            }
+            return ident;
+        } else if (next === T.DiscoverHowTo) {
+            // fn literal
+            const fnName = this.tokens.next();
+            if (this.tokens.peek(T.With)) {
+                this.tokens.next(); // with
+                // with args
+                const args = [this.expectIdent()];
+                while (this.tokens.peek() === T.Comma) {
+                    this.tokens.next(); // comma
+                    args.push(this.expectIdent());
+                }
+                return {
+                    type: N.FnDecl,
+                    name: fnName,
+                    args: args,
+                    body: this.expr(),
+                }
+            } else {
+                return {
+                    type: N.FnDecl,
+                    name: fnName,
+                    args: [],
+                    body: this.expr(),
+                }
+            }
+        } else if (next === T.WeSaid) {
+            // block
+            const exprs = [];
+            while (this.tokens.hasNext() && this.tokens.peek() !== T.EndOfStory) {
+                exprs.push(this.expr());
+            }
+            this.tokens.expect(T.EndOfStory);
+            return exprs;
+        }
+
+        throw new Error(`Parsing error: expected ident, literal, or block, got ${
+            next.toString()
+        } before ${this.tokens.peek().toString()}`);
+    }
+    expr() {
+        const next = this.tokens.next();
+        if (next === T.WhatIf) {
+            // if expr
+            const cond = this.expr();
+            const ifBody = this.expr();
+
+            let elseBody = null;
+            if (this.tokens.peek() == T.LiesBang) {
+                this.tokens.next(); // LiesBang
+                elseBody = this.expr();
+            }
+            return {
+                type: N.IfExpr,
+                cond: cond,
+                ifBody: ifBody,
+                elseBody: elseBody,
+            }
+        } else if (next === T.ExpertsClaim) {
+            // assignment
+            const name = this.expectIdent();
+            this.tokens.expect(T.ToBe);
+            const val = this.expr();
+            return {
+                type: N.Assignment,
+                name,
+                val,
+            }
+        } else if (next === T.ShockingDevelopment) {
+            // return
+            return {
+                type: N.ReturnExpr,
+                val: this.expr(),
+            }
+        } else if (next === T.PleaseLikeAndSubscribe) {
+            // prog end
+            return {
+                type: N.ProgEndExpr,
+            }
+        } else if (next == T.YouWontWantToMiss) {
+            // print expr
+            return {
+                type: N.PrintExpr,
+                val: this.expr(),
+            }
+        }
+
+        this.tokens.backstep();
+        const atom = this.atom();
+        if (BINARY_OPS.includes(this.tokens.peek())) {
+            // infix binary ops
+            // TODO: support operator precedence
+            const left = atom;
+            const op = this.tokens.next();
+            const right = this.atom();
+            return {
+                type: N.BinaryOp,
+                left,
+                right,
+            }
+        }
+
+        return atom;
+    }
+    fnCall(fnNode) {
+        this.tokens.expect(T.Of);
+        // TODO: support multiple arguments
+        const args = [this.expr()];
+        return {
+            type: N.FnCall,
+            fn: fnNode,
+            args: args,
+        }
+    }
 }
 
 /* executor (tree walk) */
 
 class Environment {
     constructor(nodes) {
-
+        this.scopes = [{}]; // begin with global scope
     }
 }
 
-const tokens = new Tokenizer(prog).tokenize();
+// main
+const tokens = tokenize(prog);
 console.log(tokens);
-
-const reader = new Reader("test of this");
+const nodes = new Parser(tokens).parse();
+console.log(nodes);
