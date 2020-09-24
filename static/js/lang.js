@@ -414,6 +414,17 @@ class Parser {
                 type: N.ExprGroup,
                 exprs: exprs,
             };
+        } else if (next === T.LParen) {
+            // block, but guarded by parens, for binary exprs
+            const exprs = [];
+            while (this.tokens.hasNext() && this.tokens.peek() !== T.RParen) {
+                exprs.push(this.expr());
+            }
+            this.tokens.expect(T.RParen);
+            return {
+                type: N.ExprGroup,
+                exprs: exprs,
+            };
         }
 
         throw new Error(`Parsing error: expected ident, literal, or block, got ${
@@ -471,7 +482,6 @@ class Parser {
         const atom = this.atom();
         if (BINARY_OPS.includes(this.tokens.peek())) {
             // infix binary ops
-            // TODO: support operator precedence
             const left = atom;
             const op = this.tokens.next();
             const right = this.atom();
