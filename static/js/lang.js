@@ -1,29 +1,4 @@
-/* the clickbait headline programming language */
-
-const prog = `
-DISCOVER HOW TO factorial WITH n
-WE SAID
-    WHAT IF n IS ACTUALLY 0
-    WE SAID
-        SHOCKING DEVELOPMENT 1
-    END OF STORY
-    LIES! WE SAID
-        SHOCKING DEVELOPMENT n MULTIPLY factorial OF n SUBTRACT 1
-    END OF STORY
-END OF STORY
-
-EXPERTS CLAIM result TO BE factorial OF 10
-YOU WON'T WANT TO MISS 'RESULT IS'
-YOU WON'T WANT TO MISS result
-
-PLEASE LIKE AND SUBSCRIBE
-`
-
-const Runtime = {
-    print(s) {
-        console.log(s.toString());
-    }
-}
+/* Tabloid: the clickbait headline programming language */
 
 /* tokenizer */
 
@@ -538,7 +513,12 @@ class ReturnError {
 }
 
 class Environment {
-    constructor() {
+    constructor(runtime) {
+        /**
+         * Runtime contains the following functions:
+         *  - print(s)
+         */
+        this.runtime = runtime;
         this.scopes = [{}]; // begin with global scope
     }
     run(nodes) {
@@ -595,7 +575,6 @@ class Environment {
                     }
                     i --;
                 }
-                console.log(this.scopes[this.scopes.length - 1]);
                 throw new Error(`Runtime error: Undefined variable "${node.val}"`);
             }
             case N.Assignment: {
@@ -656,12 +635,3 @@ class Environment {
     }
 }
 
-// main
-try {
-    const tokens = tokenize(prog);
-    const nodes = new Parser(tokens).parse();
-    const env = new Environment();
-    env.run(nodes);
-} catch (e) {
-    console.error(e);
-}
