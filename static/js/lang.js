@@ -89,7 +89,9 @@ class Wordifier {
         let acc = '';
         acc += this.reader.readUntil(c => c == endChar);
         while (acc.endsWith('\\') || !this.reader.hasNext()) {
-            acc += this.reader.readUntil(c => c != endChar);
+            acc = acc.substr(0, acc.length - 1);
+            this.reader.next(); // endChar
+            acc += endChar + this.reader.readUntil(c => c == endChar);
         }
         this.reader.next(); // throw away closing char
         this.tokens.push('"' + acc);
