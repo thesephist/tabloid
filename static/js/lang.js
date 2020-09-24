@@ -487,8 +487,11 @@ class Parser {
     }
     fnCall(fnNode) {
         this.tokens.expect(T.Of);
-        // TODO: support multiple arguments
         const args = [this.expr()];
+        while (this.tokens.peek() === T.Comma) {
+            this.tokens.next(); // comma
+            args.push(this.expr());
+        }
         return {
             type: N.FnCall,
             fn: fnNode,
