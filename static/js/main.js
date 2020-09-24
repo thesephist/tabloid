@@ -28,7 +28,7 @@ END OF STORY
 
 EXPERTS CLAIM limit TO BE 10
 YOU WON'T WANT TO MISS 'First 10 Fibonacci numbers'
-EXPERTS CLAIM nothing TO BE fibonacci OF 1, 1, limit
+EXPERTS CLAIM nothing TO BE fibonacci OF 0, 1, limit
 
 PLEASE LIKE AND SUBSCRIBE`;
 
