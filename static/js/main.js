@@ -1,14 +1,12 @@
-const PROG_DEFAULT = `YOU WON'T WANT TO MISS 'Hello, World!'
+const PROG_FACTORIAL = `YOU WON'T WANT TO MISS 'Hello, World!'
 
 DISCOVER HOW TO factorial WITH n
 WE SAID
     WHAT IF n IS ACTUALLY 0
-    WE SAID
         SHOCKING DEVELOPMENT 1
-    END OF STORY
-    LIES! WE SAID
-        SHOCKING DEVELOPMENT n MULTIPLY factorial OF n SUBTRACT 1
-    END OF STORY
+    LIES!
+        SHOCKING DEVELOPMENT
+            n TIMES factorial OF n MINUS 1
 END OF STORY
 
 EXPERTS CLAIM result TO BE factorial OF 10
@@ -16,6 +14,25 @@ YOU WON'T WANT TO MISS 'Result is'
 YOU WON'T WANT TO MISS result
 
 PLEASE LIKE AND SUBSCRIBE`;
+
+const PROG_FIBONACCI = `DISCOVER HOW TO fibonacci WITH a, b, n
+WE SAID
+    WHAT IF n SMALLER THAN 1
+        SHOCKING DEVELOPMENT b
+    LIES! WE SAID
+        YOU WON'T WANT TO MISS b
+        SHOCKING DEVELOPMENT
+            fibonacci OF b, a PLUS b, n MINUS 1
+    END OF STORY
+END OF STORY
+
+EXPERTS CLAIM limit TO BE 10
+YOU WON'T WANT TO MISS 'First 10 Fibonacci numbers'
+EXPERTS CLAIM nothing TO BE fibonacci OF 1, 1, limit
+
+PLEASE LIKE AND SUBSCRIBE`;
+
+const PROG_DEFAULT = PROG_FIBONACCI;
 
 const HEADLINES = [
     `You Won't Believe What This Programming Language Can Do!`,
@@ -42,10 +59,6 @@ class Editor extends Component {
         this.errors = '';
 
         this.handleRun = () => this.eval();
-        this.handleReset = () => {
-            this.prog = PROG_DEFAULT;
-            this.render();
-        }
         this.handleInput = evt => {
             this.prog = evt.target.value;
             this.render();
@@ -62,6 +75,16 @@ class Editor extends Component {
                     evt.target.setSelectionRange(idx + 4, idx + 4);
                 }
             }
+        }
+        this.setFactorial = () => {
+            this.prog = PROG_FACTORIAL;
+            this.output = this.errors = '';
+            this.render();
+        }
+        this.setFibonacci= () => {
+            this.prog = PROG_FIBONACCI;
+            this.output = this.errors = '';
+            this.render();
         }
     }
     eval() {
@@ -85,9 +108,10 @@ class Editor extends Component {
     compose() {
         return jdom`<div class="editor fixed block">
             <div class="controls">
-                ${this.prog === PROG_DEFAULT ? null : 
-                    jdom`<button class="block"
-                        onclick=${this.handleReset}>Reset</button>`}
+                <button class="block"
+                    onclick=${this.setFibonacci}>Fibonacci sample</button>
+                <button class="block"
+                    onclick=${this.setFactorial}>Factorial sample</button>
                 <button class="accent block"
                     onclick=${this.handleRun}>Run this!</button>
             </div>
@@ -207,12 +231,7 @@ class App extends Component {
                 target="_blank">Ink</a>.
             </p>
             <h2>How much is there?</h2>
-            <p>
-            Here's the full list of non-standard keywords that Tabloid
-            currently uses, in addition to standard operators like <code
-            class="inline fixed block">PLUS</code> and <code class="inline
-            fixed block">MINUS</code>.
-            </p>
+            <p>Here's the full list of non-standard keywords that Tabloid currently uses:</p>
             <ul>
                 <li><code class="inline fixed block">DISCOVER HOW TO...WITH</code> declare a function</li>
                 <li><code class="inline fixed block">WE SAID</code> begin a block scope</li>
@@ -223,6 +242,7 @@ class App extends Component {
                 <li><code class="inline fixed block">YOU WON'T WANT TO MISS</code> print output</li>
                 <li><code class="inline fixed block">TOTALLY RIGHT</code> true</li>
                 <li><code class="inline fixed block">COMPLETELY WRONG</code> false</li>
+                <li><code class="inline fixed block">PLUS / MINUS / TIMES / DIVIDED BY / MODULO</code> the obvious arithmetic operations</li>
                 <li><code class="inline fixed block">IS ACTUALLY</code> is equal to</li>
                 <li><code class="inline fixed block">BEATS / SMALLER THAN</code> greater than / less than</li>
                 <li><code class="inline fixed block">SHOCKING DEVELOPMENT</code> return from a function</li>

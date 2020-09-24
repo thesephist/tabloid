@@ -115,10 +115,10 @@ const T = {
     IsActually: Symbol('IsActually'),
     And: Symbol('And'),
     Or: Symbol('Or'),
-    Add: Symbol('Add'),
-    Subtract: Symbol('Subtract'),
-    Multiply: Symbol('Multiply'),
-    Divide: Symbol('Divide'),
+    Plus: Symbol('Plus'),
+    Minus: Symbol('Minus'),
+    Times: Symbol('Times'),
+    DividedBy: Symbol('DividedBy'),
     Modulo: Symbol('Modulo'),
     Beats: Symbol('Beats'), // >
     SmallerThan: Symbol('SmallerThan'), // <
@@ -130,10 +130,10 @@ const BINARY_OPS = [
     T.IsActually,
     T.And,
     T.Or,
-    T.Add,
-    T.Subtract,
-    T.Multiply,
-    T.Divide,
+    T.Plus,
+    T.Minus,
+    T.Times,
+    T.DividedBy,
     T.Modulo,
     T.Beats,
     T.SmallerThan,
@@ -211,20 +211,21 @@ function tokenize(prog) {
                 tokens.push(T.Or);
                 break;
             }
-            case 'ADD': {
-                tokens.push(T.Add);
+            case 'PLUS': {
+                tokens.push(T.Plus);
                 break;
             }
-            case 'SUBTRACT': {
-                tokens.push(T.Subtract);
+            case 'MINUS': {
+                tokens.push(T.Minus);
                 break;
             }
-            case 'MULTIPLY': {
-                tokens.push(T.Multiply);
+            case 'TIMES': {
+                tokens.push(T.Times);
                 break;
             }
-            case 'DIVIDE': {
-                tokens.push(T.Divide);
+            case 'DIVIDED': {
+                reader.expect('BY');
+                tokens.push(T.DividedBy);
                 break;
             }
             case 'MODULO': {
@@ -337,6 +338,11 @@ class Parser {
         while (this.tokens.hasNext()) {
             nodes.push(this.expr());
         }
+
+        if (nodes[nodes.length - 1].type !== N.ProgEndExpr) {
+            throw new Error('Parsing error: A Tabloid program MUST end with PLEASE LIKE AND SUBSCRIBE');
+        }
+
         return nodes;
     }
     expectIdentString() {
@@ -601,13 +607,13 @@ class Environment {
                         return left && right;
                     case T.Or:
                         return left || right;
-                    case T.Add:
+                    case T.Plus:
                         return left + right;
-                    case T.Subtract:
+                    case T.Minus:
                         return left - right;
-                    case T.Multiply:
+                    case T.Times:
                         return left * right;
-                    case T.Divide:
+                    case T.DividedBy:
                         return left / right;
                     case T.Modulo:
                         return left % right;
