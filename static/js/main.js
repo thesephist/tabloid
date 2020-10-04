@@ -41,6 +41,10 @@ const HEADLINES = [
     `Programmer Who Made Everything Now Predicts the Next Big Language!`,
     `The Secret Programming Language Every 10x Programmer Recommends!`,
     `Programmers at Microsoft Hate This One Trick to Get Good at that Code Thing!`,
+    `How To Lose Brain Fat With This Programming Language!`,
+    `Your Friends Will Be Jealous About This New Programming Language!`,
+    `You Can Earn Millions With This Programming Language!`,
+    `The Cure For Cancer Could Be Found With The Programming Language!`
 ];
 
 function randomHeadline() {
