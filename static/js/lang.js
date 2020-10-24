@@ -112,6 +112,7 @@ const T = {
     ExpertsClaim: Symbol('ExpertsClaim'),
     ToBe: Symbol('ToBe'),
     YouWontWantToMiss: Symbol('YouWontWantToMiss'),
+    LatestNewsOn: Symbol('LatestNewsOn'),
     TotallyRight: Symbol('TotallyRight'),
     CompletelyWrong: Symbol('CompletelyWrong'),
     IsActually: Symbol('IsActually'),
@@ -199,6 +200,12 @@ function tokenize(prog) {
                 reader.expect('TO');
                 reader.expect('MISS');
                 tokens.push(T.YouWontWantToMiss);
+                break;
+            }
+            case 'LATEST': {
+                reader.expect('NEWS');
+                reader.expect('ON');
+                tokens.push(T.LatestNewsOn);
                 break;
             }
             case 'IS': {
@@ -308,6 +315,7 @@ const N = {
     ReturnExpr: Symbol('ReturnExpr'),
     ProgEndExpr: Symbol('ProgEndExpr'),
     PrintExpr: Symbol('PrintExpr'),
+    InputExpr: Symbol('InputExpr'),
 }
 
 class Parser {
@@ -334,6 +342,7 @@ class Parser {
      *      ReturnExpr
      *      ProgEndExpr
      *      PrintExpr
+     *      InputExpr
      *
      */
     parse() {
@@ -485,6 +494,12 @@ class Parser {
                 type: N.PrintExpr,
                 val: this.expr(),
             }
+        } else if (next === T.LatestNewsOn) {
+            // input expr
+            return {
+                type: N.InputExpr,
+                val: this.expr(),
+            }
         }
 
         this.tokens.backstep();
@@ -538,6 +553,7 @@ class Environment {
         /**
          * Runtime contains the following functions:
          *  - print(s)
+         *  - input(s)
          */
         this.runtime = runtime;
         this.scopes = [{}]; // begin with global scope
@@ -665,6 +681,16 @@ class Environment {
                 }
                 this.runtime.print(val);
                 return val;
+            }
+            case N.InputExpr: {
+                let val = this.eval(node.val);
+                // shim for boolean to-string's
+                if (val === true) {
+                    val = 'TOTALLY RIGHT';
+                } else if (val === false) {
+                    val = 'COMPLETELY WRONG';
+                }
+                return this.runtime.input(val);
             }
             default:
                 console.log(JSON.stringify(node, null, 2));

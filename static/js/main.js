@@ -102,6 +102,9 @@ class Editor extends Component {
                     this.output += s.toString().toUpperCase() + '!\n';
                     this.render();
                 },
+                input: s => {
+                    return prompt(s);
+                },
             });
             env.run(nodes);
         } catch (e) {
