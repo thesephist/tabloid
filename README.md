@@ -40,6 +40,13 @@ We can print the result of any expression with `YOU WON'T WANT TO MISS`. You won
 YOU WON'T WANT TO MISS 'Hello, World!'
 ```
 
+Conversely, we can take (string) input from the user with `LATEST NEWS ON`. This creates a prompt to ask the user of your incredible program about the latest news.
+
+```
+EXPERTS CLAIM age TO BE
+    LATEST NEWS ON 'What is your age?'
+```
+
 We define functions with `DISCOVER HOW TO functionName WITH arguments, like, this`. We can call them with the `OF` keyword.
 
 ```

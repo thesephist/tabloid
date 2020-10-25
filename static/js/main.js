@@ -247,6 +247,7 @@ class App extends Component {
                 <li><code class="inline fixed block">END OF STORY</code> end a block scope</li>
                 <li><code class="inline fixed block">EXPERTS CLAIM...TO BE</code> declare or assign to a variable</li>
                 <li><code class="inline fixed block">YOU WON'T WANT TO MISS</code> print output</li>
+                <li><code class="inline fixed block">LATEST NEWS ON</code> take user input</li>
                 <li><code class="inline fixed block">TOTALLY RIGHT</code> true</li>
                 <li><code class="inline fixed block">COMPLETELY WRONG</code> false</li>
                 <li><code class="inline fixed block">PLUS / MINUS / TIMES / DIVIDED BY / MODULO</code> the obvious arithmetic operations</li>
