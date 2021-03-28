@@ -1,6 +1,6 @@
 # The Tabloid Programming Language 💣
 
-**Tabloid** is a minimal but Turing complete programming language inspired, nay, **supercharged** by clickbait headlines that rule the Internet today. You can try Tabloid [on the Tabloid website](https://tabloid.vercel.app) or [on the Riju repl](https://riju.codes/tabloid). Thanks to [@otherjoel](https://github.com/otherjoel), there's also a [Racket implementation](https://github.com/otherjoel/tabloid) of Tabloid that's very nearly compatible.
+**Tabloid** is a minimal but Turing complete programming language inspired, nay, **supercharged** by clickbait headlines that rule the Internet today. You can try Tabloid [on the Tabloid website](https://tabloid.vercel.app). Thanks to [@otherjoel](https://github.com/otherjoel), there's also a [Racket implementation](https://github.com/otherjoel/tabloid) of Tabloid that's very nearly compatible. A small library of math and other helper functions is also available from [@MarcelloTheArcane](https://github.com/MarcelloTheArcane)'s [tabloid-samples](https://github.com/MarcelloTheArcane/tabloid-samples) project.
 
 ![Tabloid website screenshot](static/img/screenshot.jpg)
 
