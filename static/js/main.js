@@ -224,12 +224,21 @@ class App extends Component {
             <p>Stay tuned to find out!</p>
             <h2>Does it actually work?</h2>
             <p>
-                Yes. Tabloid is a <strong>fully functioning, turing complete
+                Yes. Tabloid is a <strong>fully functioning, Turing complete
                 programming language with an interpreter</strong> written in
                 JavaScript.  Tabloid currently only supports numbers, strings,
                 and booleans, but with these elements, you can write any
-                program you'd want to write. You can edit and run the program above, or
-                <a href="https://github.com/thesephist/tabloid">see how it works for yourself</a>.
+                program you'd want to write. You can edit and run the program
+                above, or <a href="https://github.com/thesephist/tabloid">see
+                how it works for yourself</a>.
+            </p>
+            <p>
+                Besides this online interpreter, Tabloid now also has a mostly
+                compatible <a href="https://github.com/otherjoel/tabloid"
+                target="_blank">implementation in Racket</a> and a small <a
+                href="https://github.com/MarcelloTheArcane/tabloid-samples"
+                target="_blank">library of helper functions</a> ... for some
+                reason.
             </p>
             <p>
                 Before making Tabloid, I also created a more <strike>useful and
