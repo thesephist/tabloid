@@ -203,7 +203,12 @@ footer {
     line-height: 1.5em;
 }
 
+main > ul {
+    padding-left: 0;
+}
+
 main > ul li {
+    list-style: none;
     margin-bottom: .5em;
 }
 

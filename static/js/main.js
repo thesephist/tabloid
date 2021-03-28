@@ -240,21 +240,76 @@ class App extends Component {
             <h2>How much is there?</h2>
             <p>Here's the full list of standard keywords that Tabloid currently uses:</p>
             <ul>
-                <li><code class="inline fixed block">DISCOVER HOW TO...WITH</code> declare a function</li>
-                <li><code class="inline fixed block">RUMOR HAS IT</code> begin a block scope</li>
-                <li><code class="inline fixed block">A OF B, C</code> call function A with arguments B, C</li>
-                <li><code class="inline fixed block">WHAT IF...LIES!</code> an if-else expression</li>
-                <li><code class="inline fixed block">END OF STORY</code> end a block scope</li>
-                <li><code class="inline fixed block">EXPERTS CLAIM...TO BE</code> declare or assign to a variable</li>
-                <li><code class="inline fixed block">YOU WON'T WANT TO MISS</code> print output</li>
-                <li><code class="inline fixed block">LATEST NEWS ON</code> take user input</li>
-                <li><code class="inline fixed block">TOTALLY RIGHT</code> true</li>
-                <li><code class="inline fixed block">COMPLETELY WRONG</code> false</li>
-                <li><code class="inline fixed block">PLUS / MINUS / TIMES / DIVIDED BY / MODULO</code> the obvious arithmetic operations</li>
-                <li><code class="inline fixed block">IS ACTUALLY</code> is equal to</li>
-                <li><code class="inline fixed block">BEATS / SMALLER THAN</code> greater than / less than</li>
-                <li><code class="inline fixed block">SHOCKING DEVELOPMENT</code> return from a function</li>
-                <li><code class="inline fixed block">PLEASE LIKE AND SUBSCRIBE</code> end of program</li>
+                <li>
+                    <code class="inline fixed block">DISCOVER HOW TO...WITH</code>
+                    declare a function
+                </li>
+                <li>
+                    <code class="inline fixed block">RUMOR HAS IT</code>
+                    begin a block scope
+                </li>
+                <li>
+                    <code class="inline fixed block">A OF B, C</code>
+                    call function A with arguments B, C
+                </li>
+                <li>
+                    <code class="inline fixed block">WHAT IF...LIES!</code>
+                    an if-else expression
+                </li>
+                <li>
+                    <code class="inline fixed block">END OF STORY</code>
+                    end a block scope
+                </li>
+                <li>
+                    <code class="inline fixed block">EXPERTS CLAIM...TO BE</code>
+                    declare or assign to a variable
+                </li>
+                <li>
+                    <code class="inline fixed block">YOU WON'T WANT TO MISS</code>
+                    print output
+                </li>
+                <li>
+                    <code class="inline fixed block">LATEST NEWS ON</code>
+                    take user input
+                </li>
+                <li>
+                    <code class="inline fixed block">TOTALLY RIGHT</code>
+                    true
+                </li>
+                <li>
+                    <code class="inline fixed block">COMPLETELY WRONG</code>
+                    false
+                </li>
+                <li>
+                    <code class="inline fixed block">AND</code>,
+                    <code class="inline fixed block">OR</code>
+                    and/or boolean operators
+                </li>
+                <li>
+                    <code class="inline fixed block">PLUS</code>,
+                    <code class="inline fixed block">MINUS</code>,
+                    <code class="inline fixed block">TIMES</code>,
+                    <code class="inline fixed block">DIVIDED BY</code>,
+                    <code class="inline fixed block">MODULO</code>
+                    the obvious arithmetic operations
+                </li>
+                <li>
+                    <code class="inline fixed block">IS ACTUALLY</code>
+                    is equal to
+                </li>
+                <li>
+                    <code class="inline fixed block">BEATS</code>,
+                    <code class="inline fixed block">SMALLER THAN</code>
+                    greater than / less than
+                </li>
+                <li>
+                    <code class="inline fixed block">SHOCKING DEVELOPMENT</code>
+                    return from a function
+                </li>
+                <li>
+                    <code class="inline fixed block">PLEASE LIKE AND SUBSCRIBE</code>
+                    end of program
+                </li>
             </ul>
             <footer>
                 <p>
