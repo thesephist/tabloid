@@ -66,7 +66,7 @@ class Editor extends Component {
         this.handleInput = evt => {
             this.prog = evt.target.value;
             this.render();
-        }
+        };
         this.handleKeydown = evt => {
             if (evt.key === 'Tab') {
                 evt.preventDefault();
@@ -79,17 +79,17 @@ class Editor extends Component {
                     evt.target.setSelectionRange(idx + 4, idx + 4);
                 }
             }
-        }
+        };
         this.setFactorial = () => {
             this.prog = PROG_FACTORIAL;
             this.output = this.errors = '';
             this.render();
-        }
+        };
         this.setFibonacci= () => {
             this.prog = PROG_FIBONACCI;
             this.output = this.errors = '';
             this.render();
-        }
+        };
     }
     eval() {
         this.output = '';
@@ -97,8 +97,10 @@ class Editor extends Component {
         try {
             const tokens = tokenize(this.prog);
             const nodes = new Parser(tokens).parse();
-            const env = new Environment({
+            const env = new Environment();
+            env.run(nodes, {
                 print: s => {
+                    console.log(s);
                     this.output += s.toString().toUpperCase() + '!\n';
                     this.render();
                 },
@@ -106,7 +108,6 @@ class Editor extends Component {
                     return prompt(s);
                 },
             });
-            env.run(nodes);
         } catch (e) {
             this.errors = e.toString();
         }

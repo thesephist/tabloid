@@ -41,7 +41,7 @@ class Reader {
     }
 }
 
-/** 
+/**
  * Split into words for easier tokenization
  * with keywords.
  */
@@ -77,7 +77,7 @@ class Wordifier {
                     // read until WS
                     this.reader.backstep();
                     this.tokens.push(this.reader.readUntil(c => {
-                        return !c.trim() || ['(', ')', ','].includes(c)
+                        return !c.trim() || ['(', ')', ','].includes(c);
                     }));
                 }
             }
@@ -103,6 +103,7 @@ const T = {
     RParen: Symbol('RParen'),
     Comma: Symbol('Comma'),
     DiscoverHowTo: Symbol('DiscoverHowTo'),
+    Breaking: Symbol('Breaking'),
     With: Symbol('With'),
     Of: Symbol('Of'),
     RumorHasIt: Symbol('RumorHasIt'),
@@ -127,7 +128,7 @@ const T = {
     SmallerThan: Symbol('SmallerThan'), // <
     ShockingDevelopment: Symbol('ShockingDevelopment'),
     PleaseLikeAndSubscribe: Symbol('PleaseLikeAndSubscribe'),
-}
+};
 
 const BINARY_OPS = [
     T.IsActually,
@@ -153,6 +154,10 @@ function tokenize(prog) {
                 reader.expect('HOW');
                 reader.expect('TO');
                 tokens.push(T.DiscoverHowTo);
+                break;
+            }
+            case 'BREAKING': {
+                tokens.push(T.Breaking);
                 break;
             }
             case 'WITH': {
@@ -364,24 +369,37 @@ class Parser {
         }
         throw new Error(`Parsing error: expected identifier, got ${ident.toString()}`);
     }
+    readFnArgs() {
+        let args = [];
+        if (this.tokens.peek(T.With)) {
+            this.tokens.next(); // with
+            // with args
+            args.push(this.expectIdentString());
+            while (this.tokens.peek() === T.Comma) {
+                this.tokens.next(); // comma
+                args.push(this.expectIdentString());
+            }
+        }
+        return args;
+    }
     atom() {
         const next = this.tokens.next();
         if (typeof next === 'number') {
             return {
                 type: N.NumberLiteral,
                 val: next,
-            }
+            };
         } else if (typeof next === 'string') {
             if (next.startsWith('"')) {
                 return {
                     type: N.StringLiteral,
                     val: next.substr(1),
-                }
+                };
             }
             const ident = {
                 type: N.Ident,
                 val: next,
-            }
+            };
             if (this.tokens.peek() === T.Of) {
                 return this.fnCall(ident);
             }
@@ -390,37 +408,25 @@ class Parser {
             return {
                 type: N.BoolLiteral,
                 val: true,
-            }
+            };
         } else if (next === T.CompletelyWrong) {
             return {
                 type: N.BoolLiteral,
                 val: false,
-            }
+            };
         } else if (next === T.DiscoverHowTo) {
-            // fn literal
-            const fnName = this.tokens.next();
-            if (this.tokens.peek(T.With)) {
-                this.tokens.next(); // with
-                // with args
-                const args = [this.expectIdentString()];
-                while (this.tokens.peek() === T.Comma) {
-                    this.tokens.next(); // comma
-                    args.push(this.expectIdentString());
-                }
-                return {
-                    type: N.FnDecl,
-                    name: fnName,
-                    args: args,
-                    body: this.expr(),
-                }
-            } else {
-                return {
-                    type: N.FnDecl,
-                    name: fnName,
-                    args: [],
-                    body: this.expr(),
-                }
-            }
+            return {
+                type: N.FnDecl,
+                name: this.tokens.next(),
+                args: this.readFnArgs(),
+                body: this.expr(),
+            };
+        } else if (next === T.Breaking) {
+            return {
+                type: N.FnDecl,
+                args: this.readFnArgs(),
+                body: this.expr(),
+            };
         } else if (next === T.RumorHasIt) {
             // block
             const exprs = [];
@@ -466,7 +472,7 @@ class Parser {
                 cond: cond,
                 ifBody: ifBody,
                 elseBody: elseBody,
-            }
+            };
         } else if (next === T.ExpertsClaim) {
             // assignment
             const name = this.expectIdentString();
@@ -476,30 +482,30 @@ class Parser {
                 type: N.Assignment,
                 name,
                 val,
-            }
+            };
         } else if (next === T.ShockingDevelopment) {
             // return
             return {
                 type: N.ReturnExpr,
                 val: this.expr(),
-            }
+            };
         } else if (next === T.PleaseLikeAndSubscribe) {
             // prog end
             return {
                 type: N.ProgEndExpr,
-            }
+            };
         } else if (next === T.YouWontWantToMiss) {
             // print expr
             return {
                 type: N.PrintExpr,
                 val: this.expr(),
-            }
+            };
         } else if (next === T.LatestNewsOn) {
             // input expr
             return {
                 type: N.InputExpr,
                 val: this.expr(),
-            }
+            };
         }
 
         this.tokens.backstep();
@@ -514,7 +520,7 @@ class Parser {
                 op,
                 left,
                 right,
-            }
+            };
         }
 
         return atom;
@@ -530,7 +536,7 @@ class Parser {
             type: N.FnCall,
             fn: fnNode,
             args: args,
-        }
+        };
     }
 }
 
@@ -549,16 +555,46 @@ class ReturnError {
 }
 
 class Environment {
-    constructor(runtime) {
-        /**
-         * Runtime contains the following functions:
-         *  - print(s)
-         *  - input(s)
-         */
-        this.runtime = runtime;
-        this.scopes = [{}]; // begin with global scope
+    constructor(parent) {
+        this.vars = Object.create(parent ? parent.vars : null);
+        this.parent = parent;
+        if (parent) {
+            /**
+             * Runtime contains the following functions:
+             *  - print(s)
+             *  - input(s)
+             */
+            this.runtime = parent.runtime;
+        }
     }
-    run(nodes) {
+    extend() {
+        return new Environment(this);
+    }
+    lookup(name) {
+        let scope = this;
+        while (scope) {
+            if (Object.prototype.hasOwnProperty.call(scope.vars, name))
+                return scope;
+            scope = scope.parent;
+        }
+    }
+    get(name) {
+        if (name in this.vars)
+            return this.vars[name];
+        throw new Error("Undefined variable " + name);
+    }
+    set(name, value) {
+        let scope = this.lookup(name);
+        if (!scope && this.parent)
+            throw new Error("Undefined variable " + name);
+        return (scope || this).vars[name] = value;
+    }
+    def(name, value) {
+        return this.vars[name] = value;
+    }
+
+    run(nodes, runtime) {
+        this.runtime = runtime;
         let rv;
         for (const node of nodes) {
             rv = this.eval(node);
@@ -566,30 +602,33 @@ class Environment {
         return rv;
     }
     eval(node) {
-        const scope = this.scopes[this.scopes.length - 1];
-
         switch (node.type) {
             case N.NumberLiteral:
             case N.StringLiteral:
             case N.BoolLiteral:
                 return node.val;
             case N.FnDecl: {
-                scope[node.name] = node;
-                return node;
+                let closure = {
+                    env: this,
+                    node: node
+                };
+                if (node.name) {
+                    this.def(node.name, closure);
+                }
+                return closure;
             }
             case N.FnCall: {
                 const fn = this.eval(node.fn);
                 const args = node.args.map(arg => this.eval(arg));
 
-                const calleeScope = {};
-                fn.args.forEach((argName, i) => {
-                    calleeScope[argName] = args[i];
+                const calleeEnv = fn.env.extend();
+                fn.node.args.forEach((argName, i) => {
+                    calleeEnv.def(argName, args[i]);
                 });
 
-                this.scopes.push(calleeScope);
                 let rv;
                 try {
-                    this.eval(fn.body);
+                    calleeEnv.eval(fn.node.body);
                 } catch (maybeReturnErr) {
                     if (maybeReturnErr instanceof ReturnError) {
                         rv = maybeReturnErr.unwrap();
@@ -598,48 +637,37 @@ class Environment {
                         throw maybeReturnErr;
                     }
                 }
-                this.scopes.pop();
 
                 return rv;
             }
             case N.Ident: {
-                let i = this.scopes.length - 1;
-                while (i >= 0) {
-                    if (node.val in this.scopes[i]) {
-                        return this.scopes[i][node.val];
-                    }
-                    i --;
-                }
-                throw new Error(`Runtime error: Undefined variable "${node.val}"`);
+                return this.get(node.val);
             }
             case N.Assignment: {
-                scope[node.name] = this.eval(node.val);
-                return scope[node.name];
+                return this.set(node.name, this.eval(node.val));
             }
             case N.BinaryOp: {
-                const left = this.eval(node.left);
-                const right = this.eval(node.right);
                 switch (node.op) {
                     case T.IsActually:
-                        return left === right;
+                        return this.eval(node.left) === this.eval(node.right);
                     case T.And:
-                        return left && right;
+                        return this.eval(node.left) && this.eval(node.right);
                     case T.Or:
-                        return left || right;
+                        return this.eval(node.left) || this.eval(node.right);
                     case T.Plus:
-                        return left + right;
+                        return this.eval(node.left) + this.eval(node.right);
                     case T.Minus:
-                        return left - right;
+                        return this.eval(node.left) - this.eval(node.right);
                     case T.Times:
-                        return left * right;
+                        return this.eval(node.left) * this.eval(node.right);
                     case T.DividedBy:
-                        return left / right;
+                        return this.eval(node.left) / this.eval(node.right);
                     case T.Modulo:
-                        return left % right;
+                        return this.eval(node.left) % this.eval(node.right);
                     case T.Beats:
-                        return left > right;
+                        return this.eval(node.left) > this.eval(node.right);
                     case T.SmallerThan:
-                        return left < right;
+                        return this.eval(node.left) < this.eval(node.right);
                     default:
                         throw new Error(`Runtime error: Unknown binary op ${node.op.toString()}`);
                 }
