@@ -273,8 +273,8 @@ EXPERTS CLAIM nothing TO BE fibonacci OF 0, 1, limit
 PLEASE LIKE AND SUBSCRIBE`;
 
 const PROGRAMS = {
-  "Merge Sort": MERGE_SORT,
-  Fibonacci: PROG_FIBONACCI,
-  "In-Order Traversal": BINARY_INORDER_TRAVERSAL,
-  Factorial: PROG_FACTORIAL,
+    "Merge Sort": MERGE_SORT,
+    Fibonacci: PROG_FIBONACCI,
+    "In-Order Traversal": BINARY_INORDER_TRAVERSAL,
+    Factorial: PROG_FACTORIAL,
 };
