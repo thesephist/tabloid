@@ -271,7 +271,11 @@ class App extends Component {
                 </li>
                 <li>
                     <code class="inline fixed block">EXPERTS CLAIM...TO BE</code>
-                    declare or assign to a variable
+                    declare or assign to a variable (in the current scope)
+                </li>
+                <li>
+                    <code class="inline fixed block">EVIDENCE SHOWS...TO BE</code>
+                    reassign a variable
                 </li>
                 <li>
                     <code class="inline fixed block">YOU WON'T WANT TO MISS</code>
