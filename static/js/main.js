@@ -26,6 +26,8 @@ RUMOR HAS IT
     END OF STORY
 END OF STORY
 
+TAKE NOTE THAT Fibonacci numbers are dangerous IN SOME SITUATIONS
+
 EXPERTS CLAIM limit TO BE 10
 YOU WON'T WANT TO MISS 'First 10 Fibonacci numbers'
 EXPERTS CLAIM nothing TO BE fibonacci OF 0, 1, limit
@@ -314,6 +316,10 @@ class App extends Component {
                 <li>
                     <code class="inline fixed block">SHOCKING DEVELOPMENT</code>
                     return from a function
+                </li>
+                <li>
+                    <code class="inline fixed block">TAKE NOTE THAT...IN SOME SITUATIONS</code>
+                    comments
                 </li>
                 <li>
                     <code class="inline fixed block">PLEASE LIKE AND SUBSCRIBE</code>
