@@ -34,6 +34,13 @@ Tabloid supports binary infix operators for arithmetic and logic.
 
 `IS ACTUALLY` is a way to test equality, like `==` in most other languages. We can also make comparisons with `X BEATS Y` (`x > y`) and `X SMALLER THAN Y` (`x < y`).
 
+We can initialize and assign variables in the current scope with `EXPERTS CLAIM...TO BE`, and reassign variables using `EVIDENCE SHOWS...TO BE`.
+
+```
+EXPERTS CLAIM your_mom TO BE 'big'
+EVIDENCE SHOWS your_mom TO BE 'massive'
+```
+
 We can print the result of any expression with `YOU WON'T WANT TO MISS`. You won't want to miss what you're printing, and now you never will!
 
 ```
