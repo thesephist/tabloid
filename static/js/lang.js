@@ -110,6 +110,7 @@ const T = {
     LiesBang: Symbol('LiesBang'),
     EndOfStory: Symbol('EndOfStory'),
     ExpertsClaim: Symbol('ExpertsClaim'),
+    EvidenceShows: Symbol('EvidenceShows'),
     ToBe: Symbol('ToBe'),
     YouWontWantToMiss: Symbol('YouWontWantToMiss'),
     LatestNewsOn: Symbol('LatestNewsOn'),
@@ -187,6 +188,11 @@ function tokenize(prog) {
             case 'EXPERTS': {
                 reader.expect('CLAIM');
                 tokens.push(T.ExpertsClaim);
+                break;
+            }
+            case 'EVIDENCE': {
+                reader.expect('SHOWS');
+                tokens.push(T.EvidenceShows);
                 break;
             }
             case 'TO': {
@@ -477,6 +483,17 @@ class Parser {
                 name,
                 val,
             }
+        } else if (next === T.EvidenceShows) {
+            // assignment
+            const name = this.expectIdentString();
+            this.tokens.expect(T.ToBe);
+            const val = this.expr();
+            return {
+                type: N.Assignment,
+                name,
+                val,
+                lookup: true,
+            }
         } else if (next === T.ShockingDevelopment) {
             // return
             return {
@@ -613,7 +630,16 @@ class Environment {
                 throw new Error(`Runtime error: Undefined variable "${node.val}"`);
             }
             case N.Assignment: {
-                scope[node.name] = this.eval(node.val);
+                if (node.lookup) {
+                    let i = this.scopes.length - 1;
+                    while (i >= 0) {
+                        if (node.name in this.scopes[i]) {
+                            return this.scopes[i][node.name] = this.eval(node.val);
+                        }
+                        i --;
+                    }
+                    throw new Error(`Runtime error: Variable "${node.name}" does not exist`);
+                } else scope[node.name] = this.eval(node.val);
                 return scope[node.name];
             }
             case N.BinaryOp: {
