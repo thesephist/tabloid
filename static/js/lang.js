@@ -47,7 +47,9 @@ class Reader {
  */
 class Wordifier {
     constructor(str) {
-        this.reader = new Reader(str.trim());
+        const programStr = str.trim().replace(/\bTAKE NOTE THAT\b(?:.|\n)*?\bIN SOME SITUATIONS\b/gm, '');
+        // Somewhat-hacky implementation of comments, but it beats deserializing any and all invalid code within the brackets
+        this.reader = new Reader(programStr);
         this.tokens = [];
     }
     wordify() {
