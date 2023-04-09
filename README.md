@@ -77,6 +77,14 @@ WHAT IF condition RUMOR HAS IT
 END OF STORY
 ```
 
+We insert comments by using `TAKE NOTE THAT ... IN SOME SITUATIONS`. The terminating `IN SOME SITUATIONS` is always required.
+
+```
+TAKE NOTE THAT comments can be
+typed like so, even across
+multiple lines IN SOME SITUATIONS
+```
+
 In Tabloid, newlines are not significant. If you want, you can squeeze your entire damn program in a single line of source code! How wonderful! I see exactly zero ways that could possibly go wrong.
 
 The entire interpreter is contained in a single file, `static/js/lang.js`, and pretty straightforward. Due to the, *ahem*, unusual syntax of Tabloid, there are four layers, which includes a double-pass tokenizer that first produces a stream of word tokens (a string literal is a single word, punctuations are treated separately), and then a second tokenizer that tokenizes multi-word keywords like `DISCOVER HOW TO` (which is 3 words).
@@ -94,5 +102,3 @@ Tabloid's syntax has some (soft) limitations for now, because I had ~8 hours to 
 - The parser doesn't know about operator precedence. To chain infix operators together like `3 PLUS 2 TIMES 10`, use parentheses, like `3 PLUS (2 TIMES 10)`.
 - There isn't a built-in looping construct, like a `while` loop. This could be viewed as a feature, but is a little annoying. I left it out because it was less trivial than the other features to implement.
 - There isn't very good error reporting. If there is an error during parsing or at runtime, the interpreter will currently report an error and what went wrong, but won't tell you where it messed up and will reveal interpreter implementation details.
-
-Tabloid also doesn't have comments, because... I honestly forgot about them when I made this and only remembered like 7 hours in, and I got lazy. If this bothers you for some insane reason, feel free to make a pull request... I guess.
